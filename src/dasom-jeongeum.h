@@ -23,7 +23,7 @@
 #define __DASOM_JEONGEUM_H__
 
 #include <glib-object.h>
-#include "dasom.h"
+#include <dasom.h>
 #include <hangul.h>
 
 G_BEGIN_DECLS

@@ -1,20 +1,6 @@
-Dasom is an input method framework, which provides
+dasom-jeongeum is a Korean engine based on libhangul
 
-  * Input Method Server
-    * dasom-daemon including XIM
-
-  * Language Engines
-    * Korean: dasom-jeongeum (using libhangul)
-    * English: dasom-english
-
-  * Client Modules
-    * GTK+2, GTK+3, Qt4, Qt5
-
-  * Indicators
-    * GNOME shell: dasom agent extension
-    * KDE, Unity, GNOME panel: dasom-indicator (using libappindicator3)
-
-Project Homepage: https://github.com/cogniti/dasom
+Project Homepage: https://github.com/dasom-im/dasom-jeongeum
 
 
 INSTALL
@@ -26,18 +12,16 @@ INSTALL
     make
     sudo make install
     sudo ldconfig
-    sudo make update-gtk-im-cache
-    sudo make update-gtk-icon-cache
 
-  * For using symbols in Jeongeum Engine
+  * For symbols in Jeongeum Engine
 
     wget https://raw.githubusercontent.com/choehwanjin/libhangul/master/data/hanja/mssymbol.txt
     sudo mv mssymbol.txt /usr/share/libhangul/hanja/
     ls /usr/share/libhangul/hanja/mssymbol.txt
 
-  * For gnome-shell, enable dasom-agent@gnome-shell-extensions.cogno.org
 
-    gnome-shell-extension-tool -e dasom-agent@gnome-shell-extensions.cogno.org
+Configure
+---------
 
   * Configure im-config
 
@@ -54,69 +38,10 @@ INSTALL
     gsettings set org.freedesktop.Dasom.engines.jeongeum korean-101-104-key-compatible true
 
 
-Troubleshoot
-------------
-
-* Failed to load shared library
-  Check /etc/ld.so.conf and /etc/ld.so.conf.d/ for /usr/local/lib path
-
-
-Architecture
-------------
-
-      +- im modules --+    +---- each process -----+  +- a process --+
-      | gtk im module |    | gnome-shell-extension |  |   X server   |
-      | qt  im module |    | dasom-indicator       |  +--------------+
-      +---------------+    +-----------------------+         ^ |
-              | calls                  | calls               | |
-    +------------------+    +---------------------+          | |
-    | dasom IM library |    | dasom agent library |          | | communicates
-    +------------------+    +---------------------+          | |
-             ^ |                      ^ |                    | |
-             | |   communicates       | |                    | |
-             | |   via Unix Socket    | |                    | |
-             | v                      | v                    | v
-          +---------------------- a process ----------------------+
-          |                     dasom-daemon (including XIM)      |
-          +-------------------------------------------------------+
-                          | calls                  | create instance
-                          | singleton instance     | (not module yet)
-                +---------------+            +------------------+
-                | engine module |   calls    | candidate module |
-                |   interface   | ---------> |    interface     |
-                +---------------+            +------------------+
-                  |                            |
-                  +- dasom-english             +- dasom-candidate (gtk3)
-                  +- dasom-jeongeum
-
-
-Debugging
----------
-    dasom-daemon --debug
-    tail -f /var/log/daemon.log
-
-    export GTK_IM_MODULE="dasom"
-    export QT4_IM_MODULE="dasom"
-    export QT_IM_MODULE="dasom"
-    export G_MESSAGES_DEBUG=dasom
-    export XMODIFIERS="@im=dasom"
-    gedit # or kate for Qt4, qtcreator for Qt5
-
-
 References
 ----------
-  http://www.x.org/releases/X11R7.6/doc/libX11/specs/XIM/xim.html
-  http://www.w3.org/TR/ime-api/
-  https://developer.chrome.com/extensions/input_ime
-  http://docs.enlightenment.org/auto/efl/ecore_main.html
-  http://doc.qt.io/qt-4.8/qinputcontext.html
-  http://doc.qt.io/qt-5/qinputmethod.html
+
   https://git.gnome.org/browse/gtk+
 
-  https://github.com/choehwanjin/nabi
   https://github.com/choehwanjin/imhangul
   https://github.com/choehwanjin/ibus-hangul
-  https://github.com/ibus/ibus
-  https://github.com/fcitx/fcitx
-  https://github.com/fcitx/fcitx-qt5
-  https://github.com/uim/uim
