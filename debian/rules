@@ -8,7 +8,6 @@
 
 override_dh_autoreconf:
 	mkdir -p m4
-	intltoolize --copy --force --automake
 	dh_autoreconf
 
 override_dh_auto_install:
