@@ -17,6 +17,8 @@ AC_PROG_CC
 LT_INIT([disable-static])
 
 PKG_CHECK_MODULES(DASOM_JEONGEUM_DEPS, [libhangul >= 0.0.12 dasom])
+DASOM_MODULE_DIR=`pkg-config --variable=libdir dasom`/dasom/modules
+AC_SUBST(DASOM_MODULE_DIR)
 
 GLIB_GSETTINGS
 

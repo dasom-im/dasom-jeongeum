@@ -1,4 +1,4 @@
-moduledir = `pkg-config --variable=libdir dasom`/dasom/modules
+moduledir = $(DASOM_MODULE_DIR)
 module_LTLIBRARIES = dasom-jeongeum.la
 
 gsettings_SCHEMAS = org.freedesktop.Dasom.engines.jeongeum.gschema.xml
@@ -19,5 +19,5 @@ install-data-hook:
 	rm    -f $(DESTDIR)$(moduledir)/dasom-jeongeum.la
 
 uninstall-hook:
-	-rm -f $(DESTDIR)$(moduledir)/dasom-jeongeum.so
-	-rmdir $(DESTDIR)$(moduledir)
+	 rm    -f $(DESTDIR)$(moduledir)/dasom-jeongeum.so
+	-rmdir -p $(DESTDIR)$(moduledir)
