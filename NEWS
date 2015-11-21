@@ -1,3 +1,13 @@
+dasom-jeongeum (1.1) stable; urgency=medium
+
+  * dasom_engine_emit_preedit_changed() delivers preedit string and cursor
+    position
+  * Detached dasom-jeongeum from dasom framework
+  * Commit and then update preedit
+  * Do not use Delete key in deleting Jaso
+
+ -- Hodong Kim <hodong@cogno.org>  Sun, 22 Nov 2015 00:23:47 +0900
+
 dasom (1.0.1) stable; urgency=medium
 
   * Fixed race condition (closes #18)
