@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 9),
                dh-autoreconf,
                libglib2.0-dev,
                pkg-config,
-               dasom (>= 1.1),
+               dasom-dev (>= 1.1),
                libhangul-dev
 Standards-Version: 3.9.6
 Homepage: https://github.com/dasom-im/dasom-jeongeum
