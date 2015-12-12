@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(dasom-jeongeum, 1.1,
+AC_INIT(dasom-jeongeum, 1.2,
         https://github.com/dasom-im/dasom-jeongeum/issues)
 
 AC_CONFIG_HEADERS([config.h])

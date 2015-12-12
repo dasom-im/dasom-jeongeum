@@ -1,3 +1,11 @@
+dasom-jeongeum (1.2) stable; urgency=medium
+
+  * Added workaround: "avoid-reset-in-commit-callback" (closes #5)
+    - Avoid reset() called by commit callback in application.
+      Default value is true.
+
+ -- Hodong Kim <hodong@cogno.org>  Sun, 13 Dec 2015 02:26:03 +0900
+
 dasom-jeongeum (1.1) stable; urgency=medium
 
   * dasom_engine_emit_preedit_changed() delivers preedit string and cursor
