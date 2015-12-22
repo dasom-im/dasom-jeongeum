@@ -1,3 +1,9 @@
+dasom-jeongeum (1.2.1) stable; urgency=medium
+
+  * Added workaround-for-wine (closes #7 #8)
+
+ -- Hodong Kim <hodong@cogno.org>  Wed, 23 Dec 2015 05:26:38 +0900
+
 dasom-jeongeum (1.2) stable; urgency=medium
 
   * Added workaround: "avoid-reset-in-commit-callback" (closes #5)
