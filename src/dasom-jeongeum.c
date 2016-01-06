@@ -52,6 +52,7 @@ struct _DasomJeongeum
   DasomKey          **hanja_keys;
   GSettings          *settings;
   gboolean            is_double_consonant_rule;
+  gboolean            is_auto_correction;
   gchar              *layout;
   /* workaround: avoid reset called by commit callback in application */
   gboolean            avoid_reset_in_commit_cb;
@@ -486,6 +487,34 @@ dasom_jeongeum_filter_event (DasomEngine     *engine,
   return retval;
 }
 
+static bool
+on_libhangul_transition (HangulInputContext *ic,
+                         ucschar             c,
+                         const ucschar      *preedit,
+                         void               *data)
+{
+  g_debug (G_STRLOC ": %s", G_STRFUNC);
+
+  if ((hangul_is_choseong (c) && (hangul_ic_has_jungseong (ic) ||
+                                  hangul_ic_has_jongseong (ic))) ||
+      (hangul_is_jungseong (c) && hangul_ic_has_jongseong (ic)))
+    return false;
+
+  return true;
+}
+
+static void
+dasom_jeongeum_update_transition_cb (DasomJeongeum *jeongeum)
+{
+  g_debug (G_STRLOC ": %s", G_STRFUNC);
+
+  if ((g_strcmp0 (jeongeum->layout, "2") == 0) && !jeongeum->is_auto_correction)
+    hangul_ic_connect_callback (jeongeum->context, "transition",
+                                on_libhangul_transition, NULL);
+  else
+    hangul_ic_connect_callback (jeongeum->context, "transition", NULL, NULL);
+}
+
 static void
 on_changed_layout (GSettings     *settings,
                    gchar         *key,
@@ -494,10 +523,20 @@ on_changed_layout (GSettings     *settings,
   g_debug (G_STRLOC ": %s", G_STRFUNC);
 
   g_free (jeongeum->layout);
-  jeongeum->layout = NULL;
   jeongeum->layout = g_settings_get_string (settings, key);
-  g_return_if_fail (jeongeum->layout != NULL);
   hangul_ic_select_keyboard (jeongeum->context, jeongeum->layout);
+  dasom_jeongeum_update_transition_cb (jeongeum);
+}
+
+static void
+on_changed_auto_correction (GSettings     *settings,
+                            gchar         *key,
+                            DasomJeongeum *jeongeum)
+{
+  g_debug (G_STRLOC ": %s", G_STRFUNC);
+
+  jeongeum->is_auto_correction = g_settings_get_boolean (settings, key);
+  dasom_jeongeum_update_transition_cb (jeongeum);
 }
 
 static void
@@ -605,6 +644,8 @@ dasom_jeongeum_init (DasomJeongeum *jeongeum)
   jeongeum->layout = g_settings_get_string (jeongeum->settings, "layout");
   jeongeum->is_double_consonant_rule =
     g_settings_get_boolean (jeongeum->settings, "double-consonant-rule");
+  jeongeum->is_auto_correction =
+    g_settings_get_boolean (jeongeum->settings, "auto-correction");
   jeongeum->avoid_reset_in_commit_cb =
     g_settings_get_boolean (jeongeum->settings,
                             "avoid-reset-in-commit-callback");
@@ -617,6 +658,11 @@ dasom_jeongeum_init (DasomJeongeum *jeongeum)
   jeongeum->hangul_keys = dasom_key_newv ((const gchar **) hangul_keys);
   jeongeum->hanja_keys  = dasom_key_newv ((const gchar **) hanja_keys);
   jeongeum->context = hangul_ic_new (jeongeum->layout);
+
+  if ((g_strcmp0 (jeongeum->layout, "2") == 0) && !jeongeum->is_auto_correction)
+    hangul_ic_connect_callback (jeongeum->context, "transition",
+                                on_libhangul_transition, NULL);
+
   jeongeum->id      = g_strdup ("dasom-jeongeum");
   jeongeum->en_name = g_strdup ("en");
   jeongeum->ko_name = g_strdup ("ko");
@@ -658,6 +704,8 @@ dasom_jeongeum_init (DasomJeongeum *jeongeum)
   g_signal_connect (jeongeum->settings,
                     "changed::double-consonant-rule",
                     G_CALLBACK (on_changed_double_consonant_rule), jeongeum);
+  g_signal_connect (jeongeum->settings, "changed::auto-correction",
+                    G_CALLBACK (on_changed_auto_correction), jeongeum);
   g_signal_connect (jeongeum->settings,
                     "changed::avoid-reset-in-commit-callback",
                     G_CALLBACK (on_changed_avoid_reset_in_commit_cb), jeongeum);
