@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 9),
                dh-autoreconf,
                libglib2.0-dev,
                pkg-config,
-               dasom-dev (>= 1.1),
+               dasom-dev (>= 1.2.2),
                libhangul-dev
 Standards-Version: 3.9.6
 Homepage: https://github.com/dasom-im/dasom-jeongeum
@@ -14,7 +14,8 @@ Homepage: https://github.com/dasom-im/dasom-jeongeum
 Package: dasom-jeongeum
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends}, ${misc:Depends}, dasom (>= 1.1), x11-xserver-utils
+Depends: ${shlibs:Depends}, ${misc:Depends},
+         dasom (>= 1.2.2), x11-xserver-utils
 Recommends: im-config, dconf-editor
 Suggests: gnome-tweak-tool, fonts-noto-cjk, fonts-nanum
 Description: Korean language engine module for Dasom
