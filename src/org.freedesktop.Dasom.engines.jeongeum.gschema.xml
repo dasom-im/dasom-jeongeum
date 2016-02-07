@@ -63,5 +63,10 @@
       <summary>workaround for Wine</summary>
       <description>workaround for Wine</description>
     </key>
+    <key type="b" name="workaround-for-qt5">
+      <default>true</default>
+      <summary>workaround for Qt5</summary>
+      <description>workaround for Qt5</description>
+    </key>
   </schema>
 </schemalist>
