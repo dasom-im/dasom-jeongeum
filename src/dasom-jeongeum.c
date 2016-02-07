@@ -59,6 +59,7 @@ struct _DasomJeongeum
   gboolean            is_committing;
   gboolean            workaround_for_wine;
   gboolean            workaround_for_qt5;
+  gboolean            workaround_for_qt4;
 };
 
 struct _DasomJeongeumClass
@@ -308,7 +309,8 @@ dasom_jeongeum_filter_event (DasomEngine     *engine,
 
   if (jeongeum->is_english_mode)
   {
-    if ((jeongeum->workaround_for_wine && target->type == DASOM_CONNECTION_XIM) ||
+    if ((jeongeum->workaround_for_wine && target->type == DASOM_CONNECTION_XIM)          ||
+        (jeongeum->workaround_for_qt4  && target->type == DASOM_CONNECTION_DASOM_IM_QT4) ||
         (jeongeum->workaround_for_qt5  && target->type == DASOM_CONNECTION_DASOM_IM_QT5))
       return FALSE;
     else
@@ -435,7 +437,8 @@ dasom_jeongeum_filter_event (DasomEngine     *engine,
 
   if (retval)
     return TRUE;
-  else if ((jeongeum->workaround_for_wine && target->type == DASOM_CONNECTION_XIM) ||
+  else if ((jeongeum->workaround_for_wine && target->type == DASOM_CONNECTION_XIM)          ||
+           (jeongeum->workaround_for_qt4  && target->type == DASOM_CONNECTION_DASOM_IM_QT4) ||
            (jeongeum->workaround_for_qt5  && target->type == DASOM_CONNECTION_DASOM_IM_QT5))
     return FALSE;
 
@@ -634,6 +637,16 @@ on_changed_workaround_for_wine (GSettings     *settings,
 }
 
 static void
+on_changed_workaround_for_qt4 (GSettings     *settings,
+                               gchar         *key,
+                               DasomJeongeum *jeongeum)
+{
+  g_debug (G_STRLOC ": %s", G_STRFUNC);
+
+  jeongeum->workaround_for_qt4 = g_settings_get_boolean (settings, key);
+}
+
+static void
 on_changed_workaround_for_qt5 (GSettings     *settings,
                                gchar         *key,
                                DasomJeongeum *jeongeum)
@@ -662,6 +675,8 @@ dasom_jeongeum_init (DasomJeongeum *jeongeum)
                             "avoid-reset-in-commit-callback");
   jeongeum->workaround_for_wine =
     g_settings_get_boolean (jeongeum->settings, "workaround-for-wine");
+  jeongeum->workaround_for_qt4 =
+    g_settings_get_boolean (jeongeum->settings, "workaround-for-qt4");
   jeongeum->workaround_for_qt5 =
     g_settings_get_boolean (jeongeum->settings, "workaround-for-qt5");
 
@@ -724,6 +739,8 @@ dasom_jeongeum_init (DasomJeongeum *jeongeum)
                     G_CALLBACK (on_changed_avoid_reset_in_commit_cb), jeongeum);
   g_signal_connect (jeongeum->settings, "changed::workaround-for-wine",
                     G_CALLBACK (on_changed_workaround_for_wine), jeongeum);
+  g_signal_connect (jeongeum->settings, "changed::workaround-for-qt4",
+                    G_CALLBACK (on_changed_workaround_for_qt4), jeongeum);
   g_signal_connect (jeongeum->settings, "changed::workaround-for-qt5",
                     G_CALLBACK (on_changed_workaround_for_qt5), jeongeum);
 }

@@ -63,6 +63,11 @@
       <summary>workaround for Wine</summary>
       <description>workaround for Wine</description>
     </key>
+    <key type="b" name="workaround-for-qt4">
+      <default>true</default>
+      <summary>workaround for Qt4</summary>
+      <description>workaround for Qt4</description>
+    </key>
     <key type="b" name="workaround-for-qt5">
       <default>true</default>
       <summary>workaround for Qt5</summary>
