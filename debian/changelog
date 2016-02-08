@@ -1,3 +1,12 @@
+dasom-jeongeum (1.2.2) stable; urgency=medium
+ 
+  * Added workaround-for-qt4 (closes dasom-im/dasom-qt#4)
+  * Added workaround-for-qt5 (closes #15)
+  * Added "auto-correction" option (closes #10)
+    - Default value is false.
+ 
+ -- Hodong Kim <cogniti@gmail.com>  Sun, 07 Feb 2016 21:21:28 +0900
+ 
 dasom-jeongeum (1.2.1) stable; urgency=medium
 
   * Added workaround-for-wine (closes #7 #8)

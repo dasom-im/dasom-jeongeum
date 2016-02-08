@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(dasom-jeongeum, 1.2.1,
+AC_INIT(dasom-jeongeum, 1.2.2,
         https://github.com/dasom-im/dasom-jeongeum/issues)
 
 AC_CONFIG_HEADERS([config.h])
@@ -16,7 +16,7 @@ AC_PROG_CC
 
 LT_INIT([disable-static])
 
-PKG_CHECK_MODULES(DASOM_JEONGEUM_DEPS, [libhangul >= 0.0.12 dasom >= 1.1])
+PKG_CHECK_MODULES(DASOM_JEONGEUM_DEPS, [libhangul >= 0.0.12 dasom >= 1.2.2])
 DASOM_MODULE_DIR=`pkg-config --variable=libdir dasom`/dasom/modules
 AC_SUBST(DASOM_MODULE_DIR)
 
